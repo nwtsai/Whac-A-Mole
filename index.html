@@ -1,0 +1,51 @@
+<html>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+
+	<!-- Jquery -->
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
+	<script type="text/javascript" src="libraries/webgl-utils.js"></script>
+	<script type="text/javascript" src="libraries/initShaders.js"></script>
+	<script type="text/javascript" src="libraries/math.js"></script>
+	<script type="text/javascript" src="whackamole.js"></script>
+	<link href="libraries/whackamole.css" type="text/css" rel="stylesheet" />
+
+	<script id="vertex-shader" type="x-shader/x-vertex">
+		// data vecters
+		attribute vec3 vPosition;
+
+		// texture coordinates
+		attribute vec2 vTextureCoordinates;
+		varying vec2 fTextureCoordinates;
+
+		// transformation matrices
+		uniform mat4 mvMatrix;
+		uniform mat4 pMatrix;
+
+		void main() {
+		    vec3 pos = (mvMatrix * vec4(vPosition, 1.0)).xyz;
+			fTextureCoordinates = vTextureCoordinates;
+			gl_Position = pMatrix * vec4(pos, 1.0);
+		} 
+	</script>
+
+	<script id="fragment-shader" type="x-shader/x-fragment">
+		precision mediump float;
+		varying vec2 fTextureCoordinates;
+		uniform sampler2D uSampler; //texture map
+
+		void main() {
+			vec4 texColor = texture2D(uSampler, fTextureCoordinates); 
+			gl_FragColor = texColor; // use this for simple texture mapping
+		}
+	</script>
+
+	<body>
+		<canvas id="gl-canvas" width="960" height="960">
+			Oops ... your browser doesn't support the HTML5 canvas element
+		</canvas>
+
+		<h1 id="score">Score: 0</h1>
+		<h1 id="hScore">High Score: 0</h1>
+		<h1 id="timer">00:00</h1>
+	</body>
+</html>
